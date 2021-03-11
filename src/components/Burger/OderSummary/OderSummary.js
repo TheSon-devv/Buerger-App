@@ -1,11 +1,12 @@
 import React from 'react'
 import Auxx from '../../../hoc/Auxx'
+import Button from '../../UI/Button/Button'
 
 const OderSummary = (props) => {
     const ingredientSummary = Object.keys(props.ingredients)
         .map(
             igKey => {
-                return(
+                return (
                     <li key={igKey}>
                         {igKey} : {props.ingredients[igKey]}
                     </li>
@@ -19,6 +20,15 @@ const OderSummary = (props) => {
             <ul>
                 {ingredientSummary}
             </ul>
+            <p> <strong>Total Price : {props.price} $</strong></p>
+            <Button
+                btnType="Danger"
+                clicked={props.cancelHandle}
+            >CANCEL</Button>
+            <Button
+                btnType="Success"
+                clicked={props.continueHandle}
+            >CONTINUE</Button>
         </Auxx>
     )
 }
