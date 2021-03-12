@@ -25,7 +25,7 @@ const TYPE_PRICE = {
 
 const BurgerBuilder = (props) => {
     const [ingredients, setIngredients] = useState(null);
-    const [totalPrice, setTotalPrice] = useState(4);
+    const [totalPrice, setTotalPrice] = useState(0);
     const [purchase, setPuchase] = useState(false);
     const [purchasing, setPuchasing] = useState(false);
     // const [data, setData] = useState([]);
@@ -101,22 +101,13 @@ const BurgerBuilder = (props) => {
 
     const continueHandle = () => {
 
-        // setLoading(true);
-
-        // const order = {
-        //     ingredients: ingredients,
-        //     totalPrice: totalPrice,
-
-        // }
-        // axios.post('/oders.json', order)
-        //     .then(res => setLoading(false))
-        //     .catch(error => setLoading(false));
-
         const queryParams = [];
         for(let i in ingredients){
             queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i]));
             //equal property name and property value
         }
+
+        queryParams.push('price=' + totalPrice);
         const queryString = queryParams.join('&');
 
         props.history.push({
@@ -137,10 +128,6 @@ const BurgerBuilder = (props) => {
 
     let oderSummary = null;
 
-    if (loading) {
-        oderSummary = <Spinner />
-    }
-
     let burger = <Spinner />;
 
     if (ingredients) {
@@ -153,7 +140,7 @@ const BurgerBuilder = (props) => {
                     disable={disable}
                     price={totalPrice}
                     purchase={purchase}
-                    purchasing={purchasingHandler}
+                    purchasing={purchasingHandler}      
                 />
             </Auxx>
         );
@@ -168,7 +155,7 @@ const BurgerBuilder = (props) => {
     return (
         <Auxx>
             <Modal show={purchasing} modalClosed={modalClosed}>
-                {oderSummary}
+                {loading && <Spinner /> || oderSummary}
             </Modal>
             {burger}
             <Test />
