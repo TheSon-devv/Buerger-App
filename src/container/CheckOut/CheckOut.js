@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import CheckOutSummary from '../../components/Oder/CheckOutSummary/CheckOutSummary'
-import { Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import ContactData from './ContactData/ContactData';
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { purchaseInit } from "../../actions/order";
 
 const CheckOut = (props) => {
     const ingredient = useSelector(state => state.ingredients.ingredients)
     const totalPrice = useSelector(state => state.ingredients.totalPrice)
+    const purchased = useSelector(state => state.order.purchased)
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
 
@@ -23,6 +27,10 @@ const CheckOut = (props) => {
             }
         }
 
+        return ( () => {
+            dispatch(purchaseInit())
+        })
+
     }, [])
 
     const checkOutContinueHandler = () => {
@@ -33,20 +41,28 @@ const CheckOut = (props) => {
         props.history.goBack();
     }
 
-    return (
-        <div>
-            <CheckOutSummary
-                ingredients={ingredient}
-                checkOutCancel={checkOutCancelHandler}
-                checkOutContinue={checkOutContinueHandler}
-            />
-            <Route path={props.match.path + '/contact-data'}
-                render={
-                    (props) => (<ContactData ingredients={ingredient} price={totalPrice} {...props} />)
-                }
-            />
-        </div>
-    )
+    let summary = <Redirect to="/"/>
+    if (ingredient) {
+        const purchasedRedirect = purchased ? <Redirect to="/"/> : null
+        summary = (
+            <>
+                {purchasedRedirect}
+                <CheckOutSummary
+                    ingredients={ingredient}
+                    checkOutCancel={checkOutCancelHandler}
+                    checkOutContinue={checkOutContinueHandler}
+                />
+                <Route path={props.match.path + '/contact-data'}
+                    render={
+                        (props) => (<ContactData ingredients={ingredient} price={totalPrice} {...props} />)
+                    }
+                />
+            </>
+        )
+    }
+
+
+    return summary
 }
 
 export default CheckOut

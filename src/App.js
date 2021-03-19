@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import CheckOut from './container/CheckOut/CheckOut';
 import Orders from './container/Orders/Orders';
 import { Auth } from './container/Auth/Auth';
+import Logout from './container/Logout/Logout';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/checkout" component={CheckOut} />
           <Route path="/order" component={Orders} />
           <Route path="/auth" component={Auth} />
+          <Route path="/logout" component={Logout} />
         </Switch>
       </Layout>
     </Router>

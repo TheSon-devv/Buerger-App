@@ -24,9 +24,10 @@ export const authLogOut = (exTime) => {
     return dispatch => {
         setTimeout(() => {
             dispatch(logOut())
-        }, exTime * 10)
+        }, exTime * 5)
     }
 }
+
 
 export const auth = (email,password, isSignup) => {
     return dispatch => {

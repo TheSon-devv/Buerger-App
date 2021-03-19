@@ -12,8 +12,10 @@
 
 @media (max-width:860px) {
   .form {
-    width: 60%;
-    margin: 0 auto;
+    width: 80%;
+  }
+  .buttonSwitch{
+    width: 80%;
   }
 }
 
@@ -114,7 +116,7 @@ button[type="button"]:hover {
 }
 
 .buttonSwitch{
-  width: 800px;
+  max-width : 800px;
   margin: auto;
   margin-top: 10px;
 }

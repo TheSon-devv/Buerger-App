@@ -16,18 +16,23 @@ const auth = (state = initState, action) => {
         case ACTION_AUTH.AUTH_SUCCESS:
             return {
                 ...state,
-                state: {
-                    token: action.idToken,
-                    userId: action.userId,
-                    loading: false
-                }
+                token: action.idToken,
+                userId: action.userId,
+                loading: false
             }
         case ACTION_AUTH.AUTH_LOGOUT:
             return {
                 ...state,
-                token : null,
-                userId : null,
-                loading : false
+                token: null,
+                userId: null,
+                loading: false
+            }
+        case ACTION_AUTH.AUTH_FAIL:
+            return {
+                ...state,
+                token: null,
+                userId: null,
+                loading: true
             }
         default:
             return state;

@@ -16,6 +16,7 @@ const BurgerBuilder = (props) => {
 
     const ingredient = useSelector(state => state.ingredients.ingredients)
     const totalPrice = useSelector(state => state.ingredients.totalPrice)
+    const isAuthentication = useSelector(state => state.auth.token !== null)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -53,7 +54,12 @@ const BurgerBuilder = (props) => {
     }
 
     const purchasingHandler = () => {
-        setPuchasing(true);
+        if(isAuthentication){
+            setPuchasing(true);
+        }
+        else{
+            props.history.push('/auth')
+        }
     }
 
     const modalClosed = () => {
@@ -97,6 +103,7 @@ const BurgerBuilder = (props) => {
                     price={totalPrice}
                     purchase={updatePurchase(ingredient)}
                     purchasing={purchasingHandler}
+                    isAuthentication = {isAuthentication}
                 />
             </Auxx>
         );

@@ -4,7 +4,8 @@ import classes from "./ContactData.module.css";
 import axios from "../../../axios-orders";
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { purchaseBurger } from "../../../actions/order";
 
 const initState = {
     name: '',
@@ -15,16 +16,16 @@ const initState = {
 
 const ContactData = props => {
     const [data, setData] = useState(initState);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState({});
+
+    const loading = useSelector(state => state.order.loading)
+    const token = useSelector(state => state.auth.token)
 
     const dispatch = useDispatch();
 
     const orderHandler = (e) => {
         e.preventDefault();
-        setLoading(true);
 
-        const order = {
+        const orderData = {
             ingredients: props.ingredients,
             totalPrice: props.price,
             orderForm: {
@@ -34,15 +35,7 @@ const ContactData = props => {
                 postalCode: data.postalCode
             }
         }
-
-        axios.post('/oders.json', order)
-            .then(res => {
-                setLoading(false);
-                props.history.push('/')
-            })
-            .catch(error => setLoading(false));
-
-
+        dispatch(purchaseBurger(orderData,token))
     }
     const handlerInputChange = (e) => {
         const { name, value } = e.target;

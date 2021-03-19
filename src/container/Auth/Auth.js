@@ -6,13 +6,14 @@ import axios from '../../axios-orders';
 import { auth } from "../../actions/auth";
 import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../../components/UI/Spinner/Spinner";
+import { Redirect } from "react-router";
 
 export const Auth = () => {
     const { register, handleSubmit, watch, errors } = useForm();
     const [isSignup, setIsSignup] = useState(true);
 
     const loading = useSelector(state => state.auth.loading)
-    console.log(loading)
+    const token = useSelector(state => state.auth.token !== null)
 
     const dispatch = useDispatch();
 
@@ -30,7 +31,7 @@ export const Auth = () => {
 
     return (
         <>
-            {loading ? <Spinner /> :
+            {token ? <Redirect to="/" /> :
                 (
                     <>
                         <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
