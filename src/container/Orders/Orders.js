@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import Order from '../../components/Oder/Order'
 import axios from '../../axios-orders'
+import { useSelector } from 'react-redux';
+
 
 const Orders = props => {
     const [orders, setOrders] = useState([]);
+
+    const token = useSelector(state => state.auth.token)
     useEffect(() => {
-        axios.get('/oders.json')
+        axios.get('/oders.json?auth=1' )
             .then(res => {
                 const fetchedOrder = [];
                 for (let key in res.data) {
@@ -15,7 +19,7 @@ const Orders = props => {
                     })
                 }
                 setOrders(fetchedOrder)
-                console.log(fetchedOrder)
+                // console.log(fetchedOrder)
             })
             .catch(error => console.log(error))
     }, [])
@@ -26,7 +30,8 @@ const Orders = props => {
                     <Order
                         key={order.id}
                         ingredients={order.ingredients}
-                        price={order.totalPrice}
+                        orderForm={order.orderForm}   
+                        price={order.totalPrice}                    
                     />
                 )
             })}

@@ -1,86 +1,51 @@
 import React, { useState, useEffect } from 'react';
+import { addIngredients, initIngredients, removeIngredients } from "../../actions/ingredients";
+import { useSelector, useDispatch } from "react-redux";
+
 import Auxx from "../../hoc/Auxx";
 import Burger from "../../components/Burger/Burger";
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OderSummary from '../../components/Burger/OderSummary/OderSummary';
-import axios from "../../axios-orders";
-import Test from '../Test/Test';
 import Spinner from '../../components/UI/Spinner/Spinner';
-
-// const initState = {
-//     salad: 0,
-//     bacon: 0,
-//     cheese: 0,
-//     meat: 0
-// };
-
-const TYPE_PRICE = {
-    salad: 0.5,
-    bacon: 0.7,
-    cheese: 1,
-    meat: 0.3
-};
 
 
 const BurgerBuilder = (props) => {
-    const [ingredients, setIngredients] = useState(null);
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [purchase, setPuchase] = useState(false);
     const [purchasing, setPuchasing] = useState(false);
-    // const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const updatePurchase = (ingredients) => {
-        const sum = Object.keys(ingredients)
+    const ingredient = useSelector(state => state.ingredients.ingredients)
+    const totalPrice = useSelector(state => state.ingredients.totalPrice)
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(initIngredients())
+    }, [])
+
+    const updatePurchase = (ingredient) => {
+        const sum = Object.keys(ingredient)
             .map(
                 igKey => {
-                    return ingredients[igKey];
+                    return ingredient[igKey];
                 }
             )
             .reduce((sum, el) => {
                 return sum + el;
             })
-        setPuchase(sum > 0);
+        return sum > 0;
     }
 
 
-    const addIngredientsHandler = (type) => {
-        const oldCount = ingredients[type];
-        const updateCount = oldCount + 1;
-        const updateIngerdients = {
-            ...ingredients
-        }
-        updateIngerdients[type] = updateCount;
-        const priceAddition = TYPE_PRICE[type];
-        const oldPrice = totalPrice;
-        const newPrice = oldPrice + priceAddition;
-        setTotalPrice(newPrice);
-        setIngredients(updateIngerdients);
-        updatePurchase(updateIngerdients);
+    const addIngredientsHandler = (ingName) => {
+        dispatch(addIngredients(ingName))
     }
 
-    const removeIngredientsHandler = (type) => {
-        const oldCount = ingredients[type];
-        console.log(oldCount);
-        if (oldCount <= 0) {
-            return;
-        }
-        const updateCount = oldCount - 1;
-        const updateIngerdients = {
-            ...ingredients
-        }
-        updateIngerdients[type] = updateCount;
-        const priceRemove = TYPE_PRICE[type];
-        const oldPrice = totalPrice;
-        const newPrice = oldPrice - priceRemove;
-        setTotalPrice(newPrice);
-        setIngredients(updateIngerdients);
-        updatePurchase(updateIngerdients);
+    const removeIngredientsHandler = (ingName) => {
+        dispatch(removeIngredients(ingName))
     }
 
     const disable = {
-        ...ingredients
+        ...ingredient
     }
 
     for (let key in disable) {
@@ -102,8 +67,8 @@ const BurgerBuilder = (props) => {
     const continueHandle = () => {
 
         const queryParams = [];
-        for(let i in ingredients){
-            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(ingredients[i]));
+        for (let i in ingredient) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(ingredient[i]));
             //equal property name and property value
         }
 
@@ -111,41 +76,32 @@ const BurgerBuilder = (props) => {
         const queryString = queryParams.join('&');
 
         props.history.push({
-            pathname:'/checkout',
-            search:'?' + queryString
+            pathname: '/checkout',
+            search: '?' + queryString
         });
 
     }
-    useEffect(() => {
-        console.log(props)
-        axios.get('/ingredients.json')
-            .then(respone => {
-                setIngredients(respone.data);
-                console.log(respone);
-            })
-            .catch(error => console.log(error))
-    }, [])
 
     let oderSummary = null;
 
     let burger = <Spinner />;
 
-    if (ingredients) {
+    if (ingredient) {
         burger = (
             <Auxx>
-                <Burger ingredients={ingredients} />
+                <Burger ingredients={ingredient} />
                 <BuildControls
                     addIngredientsHandler={addIngredientsHandler}
                     removeIngredientsHandler={removeIngredientsHandler}
                     disable={disable}
                     price={totalPrice}
-                    purchase={purchase}
-                    purchasing={purchasingHandler}      
+                    purchase={updatePurchase(ingredient)}
+                    purchasing={purchasingHandler}
                 />
             </Auxx>
         );
         oderSummary = <OderSummary
-            ingredients={ingredients}
+            ingredients={ingredient}
             price={totalPrice}
             cancelHandle={cancelHandle}
             continueHandle={continueHandle}
@@ -155,10 +111,9 @@ const BurgerBuilder = (props) => {
     return (
         <Auxx>
             <Modal show={purchasing} modalClosed={modalClosed}>
-                {loading && <Spinner /> || oderSummary}
+                {oderSummary}
             </Modal>
             {burger}
-            <Test />
         </Auxx>
     )
 }

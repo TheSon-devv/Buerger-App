@@ -1,27 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import CheckOutSummary from '../../components/Oder/CheckOutSummary/CheckOutSummary'
-import axios from "../../axios-orders";
 import { Route } from "react-router-dom";
 import ContactData from './ContactData/ContactData';
+import { useSelector,useDispatch } from "react-redux";
 
 const CheckOut = (props) => {
-    const [ingredients, setIngredients] = useState(null);
-    const [price, setPrice] = useState(0);
+    const ingredient = useSelector(state => state.ingredients.ingredients)
+    const totalPrice = useSelector(state => state.ingredients.totalPrice)
 
     useEffect(() => {
-        // axios.get('/ingredients.json')
-        //     .then(respone => {
-        //         setIngredients(respone.data);
-        //         console.log(respone);
-        //     })
-        //     .catch(error => console.log(error));
-
 
         const query = new URLSearchParams(props.location.search);
         const ingredient = {};
         let price = 0;
         for (let param of query.entries()) {
-            console.log(param, 'asdas')
             if (param[0] === 'price') {
                 price = +param[1];
             }
@@ -30,9 +22,6 @@ const CheckOut = (props) => {
                 //['salad','1']
             }
         }
-
-        setIngredients(ingredient);
-        setPrice(price);
 
     }, [])
 
@@ -47,13 +36,13 @@ const CheckOut = (props) => {
     return (
         <div>
             <CheckOutSummary
-                ingredients={ingredients}
+                ingredients={ingredient}
                 checkOutCancel={checkOutCancelHandler}
                 checkOutContinue={checkOutContinueHandler}
             />
             <Route path={props.match.path + '/contact-data'}
                 render={
-                    (props) => (<ContactData ingredients={ingredients} price={price} {...props} />)
+                    (props) => (<ContactData ingredients={ingredient} price={totalPrice} {...props} />)
                 }
             />
         </div>

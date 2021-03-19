@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Burger from '../../Burger/Burger'
 import Button from "../../UI/Button/Button";
 import classes from "./CheckOutSummary.module.css";
@@ -21,10 +20,6 @@ const CheckOutSummary = props => {
             >CONTINUE</Button>
         </div>
     )
-}
-
-CheckOutSummary.propTypes = {
-
 }
 
 export default CheckOutSummary

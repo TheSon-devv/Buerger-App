@@ -20,7 +20,7 @@ const OderSummary = (props) => {
             <ul>
                 {ingredientSummary}
             </ul>
-            <p> <strong>Total Price : {props.price} $</strong></p>
+            <p> <strong>Total Price : {Number.parseFloat(props.price.toFixed(2))} $</strong></p>
             <Button
                 btnType="Danger"
                 clicked={props.cancelHandle}
