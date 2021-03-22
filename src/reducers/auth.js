@@ -18,7 +18,8 @@ const auth = (state = initState, action) => {
                 ...state,
                 token: action.idToken,
                 userId: action.userId,
-                loading: false
+                loading: false,
+                userId : localStorage.getItem('userId')
             }
         case ACTION_AUTH.AUTH_LOGOUT:
             return {

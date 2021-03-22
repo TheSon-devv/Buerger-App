@@ -19,6 +19,7 @@ const ContactData = props => {
 
     const loading = useSelector(state => state.order.loading)
     const token = useSelector(state => state.auth.token)
+    const userId = useSelector(state => state.auth.userId)
 
     const dispatch = useDispatch();
 
@@ -33,7 +34,8 @@ const ContactData = props => {
                 email: data.email,
                 street: data.street,
                 postalCode: data.postalCode
-            }
+            },
+            userId : userId
         }
         dispatch(purchaseBurger(orderData,token))
     }

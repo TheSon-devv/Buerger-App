@@ -9,9 +9,10 @@ const Orders = props => {
     const orders = useSelector(state => state.order.orders)
     const loading = useSelector(state => state.order.loading)
     const token = useSelector(state => state.auth.token)
+    const userId = useSelector(state => state.auth.userId)
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(fetchOrder(token))
+        dispatch(fetchOrder(token,userId))
     }, [])
 
 

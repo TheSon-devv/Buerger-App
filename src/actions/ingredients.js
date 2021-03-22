@@ -27,6 +27,6 @@ export const initIngredients = () => {
             .then(res => {
                 dispatch(setIngredients(res.data))
             })
-            .catch(error => console.log(error))
+            .catch(error => alert(error))
     }
 }
