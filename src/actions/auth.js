@@ -75,9 +75,7 @@ export const authCheckState = () => {
                 const userId = localStorage.getItem('userId');
                 dispatch(authSuccess(token, userId));
                 dispatch(authLogOut((expirationDate.getTime() - new Date().getTime()) / 1000));
-                if(userId == "dGJauN9qgQRflzq9vmcNrLdMsZk2"){
-                    alert("Xin chào Thế Sơn")
-                }
+            
             }
         }
     }

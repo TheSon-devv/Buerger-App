@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import BurgerIngredient from "./BurgerIngredient/BurgerIngredient";
 
 const Burger = (props) => {
-    console.log(props);
+    // console.log(props);
     let t;
     if (props.ingredients) {
         t = Object.keys(props.ingredients)
@@ -25,7 +25,7 @@ const Burger = (props) => {
         if (t.length === 0) {
             t = <p>Please start adding ingredient !</p>
         }
-        console.log(t)
+        // console.log(t)
     }
 
     return (
